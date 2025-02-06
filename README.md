@@ -93,17 +93,44 @@ npm run dev
 - Username: JollyGuru
 - Password: password
 
-## Deployment Options
+## Deployment
 
-### Option 1: Railway
-- Deploy both backend and PostgreSQL database
-- Single platform solution
-- Free tier available
+The application is split into frontend and backend deployments:
 
-### Option 2: Supabase + Netlify/Vercel
-- Use Supabase for database
-- Deploy frontend to Netlify/Vercel
-- Free tiers available
+### Frontend Deployment (Netlify)
+1. Connect your GitHub repository to Netlify
+2. Configure build settings:
+   - Build command: `cd client && npm install && npm run build`
+   - Publish directory: `client/dist`
+3. Set environment variables in Netlify:
+   - `VITE_API_URL`: Your backend API URL
+
+### Backend Deployment (Railway)
+1. Create a new project in Railway
+2. Add a PostgreSQL database
+3. Deploy the Node.js backend:
+   - Connect your GitHub repository
+   - Set build command: `cd server && npm install && npm run build`
+   - Start command: `cd server && npm start`
+4. Set environment variables in Railway:
+   ```
+   DB_NAME=railway
+   DB_USER=postgres
+   DB_PASSWORD=your_railway_db_password
+   JWT_SECRET_KEY=your_secret_key
+   ```
+5. Get your database connection details from Railway and update the environment variables
+
+### Alternative Backend Options
+If Railway's free tier is unavailable, consider:
+1. Fly.io - Offers a generous free tier
+2. Render - Basic free tier available
+3. Heroku - Paid options available
+
+### Database Options
+1. Railway PostgreSQL (included with Railway deployment)
+2. Supabase - Generous free tier with additional features
+3. ElephantSQL - Free PostgreSQL hosting
 
 ## Contributing
 
