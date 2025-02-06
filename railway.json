@@ -5,7 +5,7 @@
     "buildCommand": "cd server && npm ci --production=false && npm run build"
   },
   "deploy": {
-    "startCommand": "cd server && npm start",
+    "startCommand": "cd server && node dist/test-server.js",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
