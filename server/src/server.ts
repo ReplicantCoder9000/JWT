@@ -11,36 +11,36 @@ import { sequelize } from './models/index.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Enable CORS for all origins temporarily for debugging
+// CORS configuration
 app.use(cors({
-  origin: '*',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
-// Additional headers for CORS
-app.use((req, res, next): void => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-    return;
-  }
-  next();
-});
+// Pre-flight requests
+app.options('*', cors());
 
-// Serves static files in the entire client's dist folder
-app.use(express.static('../client/dist'));
-
+// Parse JSON bodies
 app.use(express.json());
+
+// Routes
 app.use(routes);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+// Database connection and server start
 sequelize.sync({force: forceDatabaseRefresh}).then(() => {
   app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
     console.log('Environment:', process.env.NODE_ENV);
+    console.log('CORS Origin:', process.env.CORS_ORIGIN);
   });
+}).catch(error => {
+  console.error('Unable to connect to the database:', error);
 });
