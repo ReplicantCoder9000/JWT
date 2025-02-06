@@ -1,5 +1,7 @@
 import Auth from './auth';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 interface RequestOptions extends Omit<RequestInit, 'headers'> {
   requiresAuth?: boolean;
   headers?: Record<string, string>;
@@ -22,7 +24,9 @@ export const fetchWithAuth = async (url: string, options: RequestOptions = {}) =
   // Add default headers
   headers['Content-Type'] = headers['Content-Type'] || 'application/json';
 
-  const response = await fetch(url, {
+  const fullUrl = url.startsWith('http') ? url : `${API_URL}${url}`;
+
+  const response = await fetch(fullUrl, {
     headers,
     ...rest,
   });
