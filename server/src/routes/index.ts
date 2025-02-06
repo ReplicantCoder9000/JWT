@@ -6,7 +6,7 @@ import { authenticateToken } from '../middleware/auth.js';
 const router = Router();
 
 // Handle OPTIONS requests for all routes
-router.options('*', (req, res) => {
+router.options('*', (_req, res) => {
   res.sendStatus(200);
 });
 
