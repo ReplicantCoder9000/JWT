@@ -11,22 +11,16 @@ import { sequelize } from './models/index.js';
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// CORS configuration
-app.use(cors());  // Allow all origins in development
+// Get CORS origin from environment variable, fallback to development URL
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:3000';
 
-// Add specific CORS headers for production
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://jwtproject.netlify.app');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  next();
-});
+// CORS configuration
+app.use(cors({
+  origin: CORS_ORIGIN,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 // Serves static files in the entire client's dist folder
 app.use(express.static('../client/dist'));
@@ -38,5 +32,6 @@ sequelize.sync({force: forceDatabaseRefresh}).then(() => {
   app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
     console.log('Environment:', process.env.NODE_ENV);
+    console.log('CORS Origin:', CORS_ORIGIN);
   });
 });
