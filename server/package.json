@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "dev": "nodemon",
     "seed": "node dist/seeds/index.js"
   },

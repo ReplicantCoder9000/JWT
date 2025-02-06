@@ -1,1 +1,1 @@
-web: cd server && npm install --production=false && npm run build && npm start
+web: cd server && npm ci --production=false && npm run build && npm start
