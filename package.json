@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Kanban board with JWT authentication",
   "scripts": {
-    "postinstall": "cd server && npm install",
-    "build": "cd server && npm run build",
-    "start": "cd server && npm start"
+    "postinstall": "cd client && npm run build",
+    "build": "cd server && npm run build && cd ../client && npm run build",
+    "start": "cd server && npm start",
+    "seed": "cd server && npm run seed",
+    "install": "cd server && npm i && cd ../client && npm i"
   },
   "engines": {
     "node": ">=18.0.0"
