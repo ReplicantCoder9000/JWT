@@ -1,14 +1,12 @@
 import { useState, FormEvent, ChangeEvent } from "react";
-import styles from './Login.module.css';
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import styles from './Login.module.css'; // Reusing login styles
+import { useNavigate, Link } from "react-router-dom";
 import Auth from '../utils/auth';
-import { login } from "../api/authAPI";
+import { register } from "../api/authAPI";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = (location.state as { from?: Location })?.from?.pathname || '/';
-  const [loginData, setLoginData] = useState({
+  const [registerData, setRegisterData] = useState({
     username: '',
     password: ''
   });
@@ -23,8 +21,8 @@ const Login = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLoginData({
-      ...loginData,
+    setRegisterData({
+      ...registerData,
       [name]: value
     });
     // Clear error when user starts typing
@@ -37,11 +35,11 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await login(loginData);
+      const response = await register(registerData);
       Auth.login(response.token);
-      navigate(from, { replace: true });
+      navigate('/', { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to login');
+      setError(err instanceof Error ? err.message : 'Failed to register');
     } finally {
       setIsLoading(false);
     }
@@ -50,7 +48,7 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <h1>Create Account</h1>
         {error && (
           <div className={styles['error-message']}>
             {error}
@@ -61,12 +59,12 @@ const Login = () => {
           <input 
             type='text'
             name='username'
-            value={loginData.username}
+            value={registerData.username}
             onChange={handleChange}
             disabled={isLoading}
             required
             aria-label="Username"
-            placeholder="Enter your username"
+            placeholder="Choose a username"
           />
         </div>
         <div className={styles['form-group']}>
@@ -74,12 +72,12 @@ const Login = () => {
           <input 
             type='password'
             name='password'
-            value={loginData.password}
+            value={registerData.password}
             onChange={handleChange}
             disabled={isLoading}
             required
             aria-label="Password"
-            placeholder="Enter your password"
+            placeholder="Choose a password"
           />
         </div>
         <button 
@@ -87,14 +85,14 @@ const Login = () => {
           disabled={isLoading}
           className={isLoading ? styles.loading : ''}
         >
-          {isLoading ? 'Logging in...' : 'Login'}
+          {isLoading ? 'Creating Account...' : 'Create Account'}
         </button>
         <p className={styles.switchForm}>
-          Need an account? <Link to="/register">Create one here</Link>
+          Already have an account? <Link to="/login">Login here</Link>
         </p>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;

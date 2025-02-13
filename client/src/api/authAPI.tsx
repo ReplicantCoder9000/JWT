@@ -5,4 +5,8 @@ const login = async (userInfo: UserLogin) => {
   return post('/auth/login', userInfo, { requiresAuth: false });
 };
 
-export { login };
+const register = async (userInfo: UserLogin) => {
+  return post('/auth/register', userInfo, { requiresAuth: false });
+};
+
+export { login, register };
