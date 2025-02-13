@@ -10,7 +10,7 @@
     "dev": "nodemon",
     "seed": "node dist/seeds/index.js",
     "test": "node dist/test-server.js",
-    "postinstall": "npm install typescript && npm run build && npm run seed"
+    "postinstall": "npm install typescript && npm run build"
   },
   "keywords": [],
   "author": "",
